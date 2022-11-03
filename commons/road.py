@@ -13,29 +13,35 @@
 # Spike includes
 from spike.control import wait_for_seconds
 
-class RoadFollower :
+# Local includes
+from commons.logger import ObjectWithLog
+
+class RoadFollower(ObjectWithLog) :
     """ Class ensuring road following """
 
-    m_shall_trace   = False
     m_line          = {}
 
     m_orienter      = None
     m_robot         = None
 
-    def __init__(self, shall_trace, robot) :
+    def __init__(self, robot, logger, shall_trace, header) :
         """ Initialize road follower
         ---
-        motors (dict)   : Dictionary describing the left and right motors port letters
+        robot (obj)         : Robot model to use for road following
+        logger (obj)        : Logger to use for logs collection
+        shall_trace (bool)  : True if logs shall be collected
+        header              : Trace header
         """
-        self.m_shall_trace = shall_trace
 
-        if self.m_shall_trace : print('--- Starting road follower creation')
+        super().__init__('RoadFollower', logger, shall_trace, header)
+
+        self.log('Starting road follower creation')
 
         self.m_robot    = robot
-        self.m_orienter = Path(robot, shall_trace, th='---')
+        self.m_orienter = Path(robot, self.m_logger, shall_trace, header=header+'---')
         self.m_line     = {}
 
-        if self.m_shall_trace : print('--- Ending road_follower creation')
+        self.log('Ending road_follower creation')
 
     def set_road(self, angle = 0, radius = 10, color = 'black') :
         """ Configure the current road to follow
@@ -45,13 +51,13 @@ class RoadFollower :
         color (str)         : Color of the line to look for
         """
 
-        if self.m_shall_trace : print('--- Starting road definition')
+        self.log('Starting road definition')
 
         self.m_line['angle']    = angle
         self.m_line['radius']   = radius
         self.m_line['color']    = color
 
-        if self.m_shall_trace : print('--- Ending road definition')
+        self.log('Ending road definition')
 
     def find_road(self) :
         """ Position the robot on the road
@@ -59,33 +65,33 @@ class RoadFollower :
         return : True if the line has been found, False otherwise
         """
 
-        if self.m_shall_trace : print('--- Starting road search')
+        self.log('Starting road search')
         found = False
 
-        if self.m_shall_trace : print('------ Position the robot orthogonally to the line')
+        self.log('Position the robot orthogonally to the line','---')
         target_yaw = 90 + self.m_line['angle']
         self.m_orienter.set([
-            {'type':'orient',   'angle':target_yaw,          'speed' : 100}
+            {'yaw':target_yaw,  'distance':0.5,       'speed' : 100}
         ])
-        self.m_orienter.follow()
+        self.m_orienter.move()
 
-        if self.m_shall_trace :
-            print('------ Look for the road color in the given distance around the robot')
+        self.log('Look for the road color in the given distance around the robot','---')
+
         found = self.find_color_in_direction(speed=10, step=0.05, color=self.m_line['color'])
-        if self.m_shall_trace and found : print('------ Line found')
+        self.log('Line found','---')
 
-        if self.m_shall_trace : print('--- Ending road search')
+        self.log('Ending road search')
 
         return found
 
     def follow_road(self) :
         """ Follow the road - once located on it """
 
-        if self.m_shall_trace : print('--- Starting following road')
+        self.log('Starting following road')
 
         current_color = self.m_robot.get_color_sensor().get_color()
         while current_color is None : current_color = self.m_robot.get_color_sensor().get_color()
-        print('------ Current color : ' + current_color)
+        self.log('Current color : ' + current_color,'---')
 
         shall_continue = current_color == self.m_line['color']
         if shall_continue : self.m_robot.get_motor('pair').start(steering=0, speed=-10)
@@ -93,17 +99,17 @@ class RoadFollower :
             current_color = self.m_robot.get_color_sensor().get_color()
             while current_color is None :
                 current_color = self.m_robot.get_color_sensor().get_color()
-            print('------ Current color : ' + current_color)
+            self.log('Current color : ' + current_color,'---')
             if current_color != self.m_line['color'] :
                 self.m_robot.get_light_matrix().show_image('SAD')
                 current_yaw = self.m_robot.get_motion_sensor().get_yaw_angle()
-                print('------ Current yaw : ' + str(current_yaw))
+                self.log('Current yaw : ' + str(current_yaw),'---')
                 if current_yaw != self.m_line['angle'] :
                     steering = int(10* (current_yaw - self.m_line['angle']) / \
                         abs(current_yaw - self.m_line['angle']))
                 else :
                     steering = 0
-                print('------ Current steering : ' + str(steering))
+                self.m_logger.log('Current steering : ' + str(steering),'---')
                 self.m_robot.get_motor('pair').start_tank(\
                     left_speed=-steering, right_speed=steering)
                 wait_for_seconds(0.1)
@@ -113,7 +119,7 @@ class RoadFollower :
 
         self.m_robot.get_motor('pair').stop()
 
-        if self.m_shall_trace : print('--- Ending following road')
+        self.log('Ending following road')
 
 
     def find_color_in_direction(self, speed, step, color) :
@@ -135,7 +141,7 @@ class RoadFollower :
             current_color = self.m_robot.get_color_sensor().get_color()
             while current_color is None :
                 current_color = self.m_robot.get_color_sensor().get_color()
-            print('------ Current color at iteration ' + str(iteration) + ' : ' + current_color)
+            self.log('Current color at iteration ' + str(iteration) + ' : ' + current_color,'---')
             if current_color == color :
                 shall_continue = False
                 found = True

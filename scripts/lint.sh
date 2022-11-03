@@ -13,4 +13,7 @@
 script=$(readlink -f $0)
 scriptpath=`dirname $script`
 
-docker run -v $scriptpath/..:/home/ technogix/terraform-python-awscli:v2.0.0 pylint --rcfile=/home/.pylintrc /home/commons
+docker run -it --rm \
+            --volume $scriptpath/..:/package/ \
+            nadegelemperiere/fll-test-docker:v1.1.0 \
+            pylint --rcfile=/package/.pylintrc /package/commons

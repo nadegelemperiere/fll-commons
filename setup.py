@@ -15,17 +15,18 @@ from setuptools import setup, find_packages
 from re import search
 
 setup(
-    name = "orchestrator",
+    name = "fll-commons",
     author = "Nadege LEMPERIERE",
-    author_email='contact.technogix@gmail.com',
-    url='https://github.com/technogix/it-orchestrator/',
+    author_email='nadege.lemperiere@gmail.com',
+    url='https://github.com/nadegelemperiere/fll-commons/',
     use_scm_version=True,
     packages=find_packages(),
     include_package_data=True,
-    description = ("An orchestrator for infrastructure deployment using terraform, ansible, and custom python functions"),
+    description = ("Common tools for all challenges"),
     license = "MIT",
-    keywords = "terraform ansible python iac orchestrator",
-    install_requires=[ 'boto3>=1.21.43', 'pykeepass>=4.0.1', 'ipaddress>=1.0.3' ],
+    keywords = "python spike",
+    install_requires=[ ],
+    python_requires=">3.6",
     classifiers=[
         'Programming Language :: Python',
         'Intended Audience :: Testers',

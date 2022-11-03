@@ -11,40 +11,31 @@
 # Latest revision: 19 october 2022
 # --------------------------------------------------- """
 
-class Mission :
-    """ Generic mission class """
+# Local includes
+from commons.logger import ObjectWithLog
 
-    m_name         = ''
+class Mission(ObjectWithLog) :
+    """ Generic mission class """
 
     m_paths        = {}
     m_robot        = None
 
-    m_shall_trace  = False
-    m_trace_header = ''
-
 # pylint: disable=R0913
-    def __init__(self, name, robot, paths, shall_trace = False, header='---') :
+    def __init__(self, name, robot, paths, logger, shall_trace = False, header='---') :
         """ Contruct mission 1
         ---
         name (str)          : Name of the mission
         robot (obj)         : Initialized robot
-        paths (arr)         : List of the names of the path to create
+        paths (list)        : List of the names of the path to create
+        logger(obj)         : Logger to use for log collection
         shall_trace (bool)  : True if traces shall be activated, false otherwise
         header              : Trace header
         """
+        super().__init__(name, logger, shall_trace, header)
 
-        self.m_shall_trace      = shall_trace
-        self.m_trace_header     = header
-        self.m_name             = name
         self.m_robot            = robot
         self.m_paths            = {}
         for path in paths :
-            self.m_paths[path] = Path(self.m_robot, shall_trace)
-
+            self.m_paths[path] = Path(self.m_robot, logger, self.m_shall_trace)
 
 # pylint: enable=R0913
-
-    def log(self, message) :
-        """ Log function """
-
-        if self.m_shall_trace : print(self.m_trace_header + message)
