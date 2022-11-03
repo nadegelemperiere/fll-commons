@@ -10,9 +10,10 @@
 
 from commons.logger import ObjectWithLog
 
-
+# pylint: disable=R0902
 class CorrectorPID(ObjectWithLog) :
     """ Corrector (Proportional, Integral, Derivative) """
+
 
     m_target                    = 0
     m_tolerance                 = 0
@@ -24,7 +25,6 @@ class CorrectorPID(ObjectWithLog) :
 
     m_integral                  = 0
     m_last_error                = 0
-
 
 # pylint: disable=R0913
     def __init__(self, kp, ki, kd, is_angle, logger, shall_trace = False,  header='---') :
@@ -93,3 +93,5 @@ class CorrectorPID(ObjectWithLog) :
             ' Current command : ' + str(result))
 
         return result
+
+# pylint: enable=R0902
