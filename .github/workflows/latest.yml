@@ -30,12 +30,14 @@ jobs:
             - name: Installing dependencies
               uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
               with:
+                user: root
                 args: pip install -r requirements-test.txt --target site-packages
 
             - name: Linting module
               continue-on-error: true
               uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
               with:
+                user: root
                 args: pylint commons
 
             - name: Run Snyk to check for vulnerabilities
@@ -51,6 +53,7 @@ jobs:
               continue-on-error: true
               uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
               with:
+                user: root
                 args: pip-audit -r requirements-test.txt --format json
 
             - name: Upload snyk result to GitHub Code Scanning
@@ -71,5 +74,6 @@ jobs:
               continue-on-error: true
               uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
               with:
+                user: root
                 args: ./scripts/robot.sh -l WARN -d tests
 
