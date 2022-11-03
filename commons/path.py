@@ -40,7 +40,7 @@ class Path(ObjectWithLog) :
 
         self.m_robot = robot
         self.m_path = []
-        self.m_pid = CorrectorPID(1,0,0, self.m_logger, self.m_shall_trace)
+        self.m_pid = CorrectorPID(1,0,0, True, self.m_logger, self.m_shall_trace)
 
         self.log('Ending PID filter creation')
 
@@ -101,19 +101,26 @@ class Path(ObjectWithLog) :
         # Start the movement with minimal speed
         motorpair.start_at_power(min_speed,0)
 
+        target_total_distance = 0
+        current_total_distance = 0
         for movement in self.m_path :
+            target_total_distance += abs(movement['distance'])
 
-            self.log('Target distance : ' + str(movement['distance']))
+        self.log('Target distance : ' + str(target_total_distance))
+
+        for movement in self.m_path :
 
             self.m_pid.initialize(movement['yaw'],0.1)
             shall_continue = True
-            total_distance = 0
+            current_distance = 0
 
             previous_position = self.m_robot.measure()
+            i_iteration = 0
 
-            while shall_continue:
+            while shall_continue and i_iteration < 100:
 
                 current_position = self.m_robot.measure()
+                i_iteration += 1
 
                 command_yaw = self.m_pid.update(current_position['yaw'])
 
@@ -123,10 +130,11 @@ class Path(ObjectWithLog) :
                 # displacement which contributes to moving the robot in the right direction
                 proj_distance = current_degrees / 360 * pi * self.m_robot.get_wheel_diameter() * \
                     cos((current_position['yaw'] - movement['yaw']) * 1.0 / 180 * pi)
-                total_distance += proj_distance
+                current_distance += proj_distance
+                current_total_distance += proj_distance
 
                 speed = self.__extrapolate_speed( \
-                    movement['distance'], 0, total_distance, min_speed, ramp, max_speed)
+                    movement['distance'], 0, current_distance, min_speed, ramp, max_speed)
 
                 steering = 0
                 if command_yaw != 0 :
@@ -136,13 +144,15 @@ class Path(ObjectWithLog) :
                     steering = -steering
 
                 self.log('Current robot measures : ' + str(current_position))
-                self.log('Current distance in cm : ' + str(total_distance))
+                self.log('Current distance in cm : ' + str(current_distance))
+                self.log('Current total distance in cm : ' + str(current_total_distance))
                 self.log('Speed : ' + str(speed))
                 self.log('Steering : ' + str(steering))
 
                 previous_position = current_position
 
-                if abs(total_distance) >= abs(movement['distance']) :
+                if abs(current_distance) >= abs(movement['distance']) and \
+                    current_distance * movement['distance'] >= 0 : # Same sign
                     shall_continue = False
                 else :
                     motorpair.start_at_power(int(speed),steering)

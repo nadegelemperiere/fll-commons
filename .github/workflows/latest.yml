@@ -23,22 +23,18 @@ jobs:
         name: Analyze Package
         runs-on: ubuntu-latest
         container:
+          image: docker://nadegelemperiere/fll-test-docker:v1.1.0
+          options: --user root
         steps:
             - name: Checkout code
               uses: actions/checkout@master
 
             - name: Installing dependencies
-              uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
-              with:
-                user: root
-                args: pip install -r requirements-test.txt --target site-packages
+              run: pip install -r requirements-test.txt --target site-packages
 
             - name: Linting module
               continue-on-error: true
-              uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
-              with:
-                user: root
-                args: pylint commons
+              run: pylint commons
 
             - name: Run Snyk to check for vulnerabilities
               continue-on-error: true
@@ -51,10 +47,7 @@ jobs:
 
             - name: Run pip-audit to check for vulnerabilities
               continue-on-error: true
-              uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
-              with:
-                user: root
-                args: pip-audit -r requirements-test.txt --format json
+              run: pip-audit -r requirements-test.txt --format json
 
             - name: Upload snyk result to GitHub Code Scanning
               uses: github/codeql-action/upload-sarif@v2
@@ -65,6 +58,9 @@ jobs:
     test:
         name: Testing Package
         runs-on: ubuntu-latest
+        container:
+          image: docker://nadegelemperiere/fll-test-docker:v1.1.0
+          options: --user root
         needs: [check]
         steps:
             - name: Checkout code
@@ -72,8 +68,5 @@ jobs:
 
             - name: Launching tests
               continue-on-error: true
-              uses: docker://nadegelemperiere/fll-test-docker:v1.1.0
-              with:
-                user: root
-                args: ./scripts/robot.sh -l WARN -d tests
+              run: ./scripts/robot.sh -l WARN -d tests
 

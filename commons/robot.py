@@ -29,14 +29,14 @@ class Robot(ObjectWithLog) :
     # Correction to define backward and forward according to motors position
     m_direction                 = 1
 
-    def __init__(self,  logger, shall_trace, header) :
+    def __init__(self,  logger, shall_trace = False, header='---') :
         """ Constructor
         ---
         shall_trace (bool)  : True if traces shall be activated, false otherwise
         logger (obj)        : Logger to use for log collection
         header              : Trace header
         """
-        super().__init__('Path', logger, shall_trace, header)
+        super().__init__('Robot', logger, shall_trace, header)
 
         self.m_hub                      = None
         self.m_motors                   = {}

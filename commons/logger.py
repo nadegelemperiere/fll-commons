@@ -57,7 +57,7 @@ class Logger :
         # Opening the file to store logs if they shall be stored rather than printed on the spot
         if not self.m_shall_print_at_once :
             self.m_logs = open(self.m_filename,'w', encoding='UTF-8')
-            self.m_logs.write('######################## LOGS ##############################\n')
+            self.m_logs.write('######################## LOGS ##############################')
 
         self.m_timer.reset()
 
@@ -81,7 +81,9 @@ class Logger :
         """
 
         if shall_trace :
-            seconds = '{:.6f}'.format(self.m_timer.now())
+# pylint: disable=C209
+            seconds = str("{:.4f}".format(self.m_timer.now()))
+# pylint: enable=C209
             if topic in self.m_topics or len(self.m_topics) == 0 :
                 full_message = header + ' [' + seconds + 's] - ' + topic + ' : ' + message
                 if self.m_shall_print_at_once   : print(full_message)

@@ -17,9 +17,14 @@ class Spikebot(Robot) :
     Generic class to share spike robot information with all python functions
     """
 
-    def __init__(self) :
-        """ Constructor"""
-        super().__init__()
+    def __init__(self,  logger, shall_trace = False, header='---') :
+        """ Constructor
+        ---
+        shall_trace (bool)  : True if traces shall be activated, false otherwise
+        logger (obj)        : Logger to use for log collection
+        header              : Trace header
+        """
+        super().__init__(logger, shall_trace, header)
 
         self.m_hub              = PrimeHub()
 
