@@ -82,7 +82,7 @@ class Logger :
 
         if shall_trace :
 # pylint: disable=C0209
-            seconds = str("{:.4f}".format(self.m_timer.now()))
+            seconds = str("{:.6f}".format(self.m_timer.now()))
 # pylint: enable=C0209
             if topic in self.m_topics or len(self.m_topics) == 0 :
                 full_message = header + ' [' + seconds + 's] - ' + topic + ' : ' + message
