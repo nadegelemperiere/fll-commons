@@ -46,7 +46,7 @@ Tests can be executed in an environment :
 
 * in which docker is available, by using the `fll test image`_ in its latest version, which already contains python, pip and bash, by executing the script `scripts/test.sh`_
 
-.. _`technogix infrastructure image`: https://github.com/nadegelemperiere/fll-test-docker
+.. _`fll test image`: https://github.com/nadegelemperiere/fll-test-docker
 .. _`scripts/robot.sh`: scripts/robot.sh
 .. _`scripts/test.sh`: scripts/test.sh
 
