@@ -35,23 +35,8 @@ jobs:
             - name: Linting module
               run: pylint commons
 
-            - name: Run Snyk to check for vulnerabilities
-              uses: snyk/actions/python@master
-              env:
-                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-                PYTHONPATH: /github/workspace/site-packages
-              with:
-                args: --sarif-file-output=snyk.sarif --file=setup.py
-
             - name: Run pip-audit to check for vulnerabilities
               run: pip-audit -r requirements-test.txt --format json
-
-            - name: Upload snyk result to GitHub Code Scanning
-              uses: github/codeql-action/upload-sarif@v2
-              if: always()
-              with:
-                sarif_file: snyk.sarif
-
 
     test:
         name: Testing Package
