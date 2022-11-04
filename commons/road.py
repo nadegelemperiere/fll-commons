@@ -24,16 +24,15 @@ class RoadFollower(ObjectWithLog) :
     m_orienter      = None
     m_robot         = None
 
-    def __init__(self, robot, logger, shall_trace, header) :
+    def __init__(self, robot, logger, logconfig) :
         """ Initialize road follower
         ---
         robot (obj)         : Robot model to use for road following
         logger (obj)        : Logger to use for logs collection
-        shall_trace (bool)  : True if logs shall be collected
-        header              : Trace header
+        logconfig (dict)    : Logger configuration parameters
         """
 
-        super().__init__('RoadFollower', logger, shall_trace, header)
+        super().__init__('RoadFollower', logger, logconfig)
 
         self.log('Starting road follower creation')
 

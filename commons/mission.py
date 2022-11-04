@@ -21,21 +21,20 @@ class Mission(ObjectWithLog) :
     m_robot        = None
 
 # pylint: disable=R0913
-    def __init__(self, name, robot, paths, logger, shall_trace = False, header='---') :
-        """ Contruct mission 1
+    def __init__(self, name, robot, paths, logger, logconfig) :
+        """ Contruct generic mission
         ---
         name (str)          : Name of the mission
         robot (obj)         : Initialized robot
         paths (list)        : List of the names of the path to create
         logger(obj)         : Logger to use for log collection
-        shall_trace (bool)  : True if traces shall be activated, false otherwise
-        header              : Trace header
+        logconfig (dict)    : Logger configuration parameters
         """
-        super().__init__(name, logger, shall_trace, header)
+        super().__init__(name, logger, logconfig)
 
         self.m_robot            = robot
         self.m_paths            = {}
         for path in paths :
-            self.m_paths[path] = Path(self.m_robot, logger, self.m_shall_trace)
+            self.m_paths[path] = Path(self.m_robot, logger, logconfig)
 
 # pylint: enable=R0913

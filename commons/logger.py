@@ -28,6 +28,9 @@
 # System includes
 from os import remove, listdir
 
+# Local includes
+from commons.timer import UTimer
+
 class Logger :
     """ Real time logger  """
 
@@ -41,7 +44,7 @@ class Logger :
     m_filename              = ''
 
 # pylint: disable=W0102, R1732
-    def __init__(self, timer, shall_print_at_once = False, topics=[], filename='logs.txt') :
+    def __init__(self, shall_print_at_once = False, topics=[], filename='logs.txt') :
         """ Constructor
         ---
         timer (obj)                 : Timer for time measurement (matching spike timer interface)
@@ -50,7 +53,7 @@ class Logger :
         """
 
         self.m_shall_print_at_once      = shall_print_at_once
-        self.m_timer                    = timer
+        self.m_timer                    = UTimer()
         self.m_topics                   = topics
         self.m_filename                 = filename
 
@@ -123,7 +126,7 @@ class ObjectWithLog :
     m_logger       = None
     m_trace_header = ''
 
-    def __init__(self, name, logger, shall_trace = False, header='---') :
+    def __init__(self, name, logger, logconfig) :
         """ Contruct generic object
         ---
         name (str)          : Name to use for object
@@ -132,8 +135,8 @@ class ObjectWithLog :
         header (str)        : Trace header
         """
 
-        self.m_shall_trace      = shall_trace
-        self.m_trace_header     = header
+        self.m_shall_trace      = logconfig['shall_trace']
+        self.m_trace_header     = logconfig['header']
         self.m_logger           = logger
         self.m_name             = name
 

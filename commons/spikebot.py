@@ -9,6 +9,9 @@
 # Latest revision: 19 october 2022
 # --------------------------------------------------- """
 
+# Local includes
+from math import pi
+
 # Spike includes
 from spike import PrimeHub, Motor, MotorPair, ColorSensor
 
@@ -17,14 +20,13 @@ class Spikebot(Robot) :
     Generic class to share spike robot information with all python functions
     """
 
-    def __init__(self,  logger, shall_trace = False, header='---') :
+    def __init__(self,  logger, logconfig) :
         """ Constructor
         ---
-        shall_trace (bool)  : True if traces shall be activated, false otherwise
         logger (obj)        : Logger to use for log collection
-        header              : Trace header
+        logconfig (dict)    : Logger configuration parameters
         """
-        super().__init__(logger, shall_trace, header)
+        super().__init__(logger, logconfig)
 
         self.m_hub              = PrimeHub()
 

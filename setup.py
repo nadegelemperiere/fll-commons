@@ -25,8 +25,8 @@ setup(
     description = ("Common tools for all challenges"),
     license = "MIT",
     keywords = "python spike",
-    install_requires=[ ],
-    python_requires=">3.6",
+    install_requires=[],
+    python_requires=">=3.11",
     classifiers=[
         'Programming Language :: Python',
         'Intended Audience :: Testers',

@@ -29,6 +29,7 @@ done
 
 # Install required python packages
 pip install --quiet --no-warn-script-location -r $scriptpath/../requirements-test.txt
+pip install --quiet --no-warn-script-location -r $scriptpath/../requirements.txt
 pip install --quiet  --no-warn-script-location $scriptpath/../
 
 # Launch python scripts to setup terraform environment

@@ -8,30 +8,9 @@
 # Latest revision: 1 november 2022
 # --------------------------------------------------- """
 
-
-# System includes
-from time import time
-
 # Module includes
 from commons.robot import Robot
 from commons.logger import Logger
-
-class MockTimer :
-
-    m_reference_time = -1
-
-    def __init__(self) :
-
-        self.m_reference_time = time()
-
-    def reset(self) :
-
-        self.m_reference_time = time()
-
-
-    def now(self) :
-
-        return (time() - self.m_reference_time)
 
 class MockMotionSensor :
     """ Class mocking the gyroscope """
@@ -125,20 +104,18 @@ class Mock(Robot):
 
     m_data      = {}
 
-    m_timer     = None
     m_logger    = None
 
     def __init__(self, data) :
         """ Constructor"""
-        super().__init__(self.m_logger, True, '---')
+        super().__init__(self.m_logger, {'shall_trace':True, 'header':'---'})
 
         self.m_wheels_distance      = 14.3
         self.m_wheel_diameter       = 8.8
         self.m_data                 = data
         self.m_shall_trace          = True
 
-        self.m_timer    = MockTimer()
-        self.m_logger   = Logger(self.m_timer,shall_print_at_once=False)
+        self.m_logger   = Logger(shall_print_at_once=False)
 
 
     def initialize(self) :

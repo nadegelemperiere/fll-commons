@@ -27,7 +27,7 @@ class CorrectorPID(ObjectWithLog) :
     m_last_error                = 0
 
 # pylint: disable=R0913
-    def __init__(self, kp, ki, kd, is_angle, logger, shall_trace = False,  header='---') :
+    def __init__(self, kp, ki, kd, is_angle, logger, logconfig) :
         """ Initialize orienter
         ---
         ki (float)          : Integral coefficient
@@ -35,11 +35,10 @@ class CorrectorPID(ObjectWithLog) :
         kp (float)          : Proportional coefficient
         is_angle (bool)     : True if measure is an angle who requires modulo, false otherwise
         logger(obj)         : Logger to use for logs collection
-        shall_trace (bool)  : True if traces shall be activated, false otherwise
-        th                  : Trace header
+        logconfig (dict)    : Logger configuration parameters
         """
 
-        super().__init__('CorrectorPID', logger, shall_trace, header)
+        super().__init__('CorrectorPID', logger, logconfig)
 
         self.log('Starting PID creation')
 

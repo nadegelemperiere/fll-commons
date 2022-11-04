@@ -15,5 +15,5 @@ scriptpath=`dirname $script`
 
 docker run -it --rm \
             --volume $scriptpath/..:/package/ \
-            nadegelemperiere/fll-test-docker:v1.1.0 \
+            nadegelemperiere/fll-test-docker:v1.2.0 \
             pylint --rcfile=/package/.pylintrc /package/commons

@@ -26,21 +26,20 @@ class Path(ObjectWithLog) :
 
     s_default_rotation_speed    = 15
 
-    def __init__(self, robot, logger, shall_trace = False,  header='---') :
+    def __init__(self, robot, logger, logconfig) :
         """ Initialize orienter
         ---
         robot (obj)         : Initialized robot
         logger (obj)        : Logger to use for log collection
-        shall_trace (bool)  : True if traces shall be activated, false otherwise
-        header              : Trace header
+        logconfig (dict)    : Logger configuration parameters
         """
-        super().__init__('Path', logger, shall_trace, header)
+        super().__init__('Path', logger, logconfig)
 
         self.log('Starting PID filter creation')
 
         self.m_robot = robot
         self.m_path = []
-        self.m_pid = CorrectorPID(1,0,0, True, self.m_logger, self.m_shall_trace)
+        self.m_pid = CorrectorPID(1,0,0, True, self.m_logger, logconfig)
 
         self.log('Ending PID filter creation')
 
@@ -86,7 +85,7 @@ class Path(ObjectWithLog) :
 
 # pylint: disable=R0914
     def start(self, min_speed=20, ramp=0.2, max_speed = 100) :
-        """ Launch controlled movement to follow path. This movement is
+        """ Generator function using controlled movement to follow path. This movement is
         less precise but more time efficient
         ---
         min_speed (float)   : Movement starting speed (0 to 100 - Should not be less than 20)
@@ -138,16 +137,18 @@ class Path(ObjectWithLog) :
 
                 steering = 0
                 if command_yaw != 0 :
-                    steering = max(-100,min(100,int(50 * command_yaw / abs(command_yaw))))
+                    steering = max(-100,min(100,int(2 * command_yaw)))
                 if movement['distance'] < 0 :
                     speed = -speed
                     steering = -steering
 
-                self.log('Current robot measures : ' + str(current_position))
-                self.log('Current distance in cm : ' + str(current_distance))
-                self.log('Current total distance in cm : ' + str(current_total_distance))
-                self.log('Speed : ' + str(speed))
-                self.log('Steering : ' + str(steering))
+                to_log = current_position
+                to_log['distance'] = current_distance
+                to_log['total distance'] = current_total_distance
+                to_log['speed'] = speed
+                to_log['steering'] = steering
+
+                self.log('Current robot measures : ' + str(to_log))
 
                 previous_position = current_position
 
@@ -157,7 +158,12 @@ class Path(ObjectWithLog) :
                 else :
                     motorpair.start_at_power(int(speed),steering)
 
+                yield True
+
         motorpair.stop()
+
+        yield False
+
 # pylint: enable=R0914
 
     def __orient(self, motorpair, yaw, speed = 100, iterations = 10) :
@@ -243,8 +249,6 @@ class Path(ObjectWithLog) :
         result = max_speed
 
         percentage = max(0,min(1,1.0 * (current - initial) / (target - initial)))
-        self.log('Speed percentage : ' + str(percentage))
-        self.log('Cur : ' + str(current) + ' Init : ' + str(initial) + ' Target : ' + str(target))
         if percentage < ramp :
             # Initial ramp for acceleration
             result = min_speed + percentage / ramp * (max_speed - min_speed)

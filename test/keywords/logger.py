@@ -9,7 +9,7 @@
 # --------------------------------------------------- """
 
 # System includes
-from time import time, sleep
+from time import time
 
 # Robotframework includes
 from robot.libraries.BuiltIn import BuiltIn, _Misc
@@ -20,16 +20,12 @@ ROBOT = False
 # Module includes
 from commons.logger import Logger
 
-# Local includes
-from mock import MockTimer
-
 @keyword('Log And Print During 100 Iterations')
 def log_and_print_during_a_hundred_iterations() :
 
     result = []
 
-    timer = MockTimer()
-    log = Logger(timer, shall_print_at_once=True)
+    log = Logger(shall_print_at_once=True)
 
     initial_time = time()
     current_time = initial_time
@@ -48,8 +44,7 @@ def log_and_retain_during_a_hundred_iterations() :
 
     result = []
 
-    timer = MockTimer()
-    logger = Logger(timer,shall_print_at_once=False)
+    logger = Logger(shall_print_at_once=False)
 
     initial_time = time()
     current_time = initial_time
@@ -68,8 +63,7 @@ def log_selected_topics_during_a_hundred_iterations(topics) :
 
     result = None
 
-    timer = MockTimer()
-    logger = Logger(timer, shall_print_at_once=False,topics=topics)
+    logger = Logger(shall_print_at_once=False,topics=topics)
 
     i_iteration = 0
 

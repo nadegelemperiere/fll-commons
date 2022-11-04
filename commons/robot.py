@@ -29,14 +29,13 @@ class Robot(ObjectWithLog) :
     # Correction to define backward and forward according to motors position
     m_direction                 = 1
 
-    def __init__(self,  logger, shall_trace = False, header='---') :
+    def __init__(self,  logger, logconfig) :
         """ Constructor
         ---
-        shall_trace (bool)  : True if traces shall be activated, false otherwise
         logger (obj)        : Logger to use for log collection
-        header              : Trace header
+        logconfig (dict)    : Logger configuration parameters
         """
-        super().__init__('Robot', logger, shall_trace, header)
+        super().__init__('Robot', logger, logconfig)
 
         self.m_hub                      = None
         self.m_motors                   = {}
@@ -135,7 +134,7 @@ class Robot(ObjectWithLog) :
         result = distance
 
         if attachment in self.m_attachments :
-            if self.m_attachments[attachment]['position'] == 'back' :
+            if self.m_attachments[attachment].get_position() == 'back' :
                 result = - distance
 
         return result
@@ -152,32 +151,9 @@ class Robot(ObjectWithLog) :
 
         if name in self.m_attachments :
             result = self.m_attachments[name]
+            self.log('Attachment ' + name + ' found')
         else :
             self.log('Attachment ' + name + ' not found')
-
-        return result
-
-    def get_motor_from_attachment(self, attachment):
-        """ Get the motor controlling the attachment
-        ---
-        name (str)      : Name of the attachment which motor shall be get
-        ---
-        returns (obj)   : The motor controlling the attachment
-        """
-
-        result = None
-
-        if 'motor' in self.m_components :
-            if attachment in self.m_attachments :
-                if self.m_attachments[attachment]['position'] in self.m_components['motor'] :
-                    result = self.m_components['motor'][self.m_attachments[attachment]['position']]
-                else :
-                    self.log('Motor ' + self.m_attachments[attachment]['position'] + \
-                        ' for attachment ' + attachment + ' not found')
-            else :
-                self.log('Attachment ' + attachment + ' not found')
-        else :
-            self.log('No motor in robot')
 
         return result
 
