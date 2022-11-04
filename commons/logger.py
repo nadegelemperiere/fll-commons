@@ -57,7 +57,7 @@ class Logger :
         # Opening the file to store logs if they shall be stored rather than printed on the spot
         if not self.m_shall_print_at_once :
             self.m_logs = open(self.m_filename,'w', encoding='UTF-8')
-            self.m_logs.write('######################## LOGS ##############################')
+            self.m_logs.write('######################## LOGS ##############################\n')
 
         self.m_timer.reset()
 
