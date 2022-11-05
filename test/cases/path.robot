@@ -1,14 +1,11 @@
 # -------------------------------------------------------
-# TECHNOGIX
-# -------------------------------------------------------
-# Copyright (c) [2022] Technogix SARL
+# Copyright (c) [2022] Nadege LEMPERIERE
 # All rights reserved
 # -------------------------------------------------------
-# Robotframework test suite for iam compliance with the
-# CIS Amazon Web Services Three Tier Benchmark v1.0.0
+# Robotframework test suite for path following testing
 # -------------------------------------------------------
-# Nadège LEMPERIERE, @27 october 2021
-# Latest revision: 27 october 2021
+# Nadège LEMPERIERE, @02 november 2022
+# Latest revision: 04 november 2022
 # -------------------------------------------------------
 
 *** Settings ***
