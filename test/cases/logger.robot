@@ -33,8 +33,8 @@ Library         ../keywords/logger.py
 
 1.3 Ensure logger enable filter by topic
     @{topics} =          Create List    Whatever
-    ${result}            Log Selected Topics During 100 Iterations    @{topics}
+    ${result}            Log Selected Topics During 100 Iterations    ${topics}
     Length Should Be     ${result}    61
     @{topics} =          Create List    test
-    ${result}            Log Selected Topics During 100 Iterations    @{topics}
+    ${result}            Log Selected Topics During 100 Iterations    ${topics}
     Length Should Be     ${result}    9661
