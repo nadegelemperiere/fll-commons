@@ -114,12 +114,10 @@ class Path(ObjectWithLog) :
             current_distance = 0
 
             previous_position = self.m_robot.measure()
-            i_iteration = 0
 
-            while shall_continue and i_iteration < 100:
+            while shall_continue :
 
                 current_position = self.m_robot.measure()
-                i_iteration += 1
 
                 command_yaw = self.m_pid.update(current_position['yaw'])
 
