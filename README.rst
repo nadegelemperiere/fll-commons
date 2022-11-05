@@ -5,7 +5,7 @@ Common tools for FLL challenges using spike lego bricks
 About The Project
 =================
 
-This project contains python classes enabling standard functions for
+This project contains python classes providing standard functions for bot challenges
 
 .. image:: https://badgen.net/github/checks/nadegelemperiere/fll-commons
    :target: https://github.com/nadegelemperiere/fll-commons/actions/workflows/release.yml
