@@ -16,22 +16,23 @@ Library         OperatingSystem
 
 *** Variables ***
 ${EXCEL_DATA_FILE}                ${data}/sensors-data.xlsx
+${JSON_CONF_FILE}                 ${data}/truth.json
 
 *** Test Cases ***
 
 2.1 Ensure path is correctly followed when using perfect data north oriented
     [Tags]      Path
-    ${data}     Load Data       ${EXCEL_DATA_FILE}    nn0rs    0    50
+    ${data}     Load Data       ${JSON_CONF_FILE}    ${EXCEL_DATA_FILE}    nn0rs    0    50
     ${result}   Apply Filter    ${data}
 
 2.2 Ensure path is correctly followed when using perfect data north east oriented data
     [Tags]      Path
-    ${data}     Load Data       ${EXCEL_DATA_FILE}    nn45rs    45    50
+    ${data}     Load Data       ${JSON_CONF_FILE}    ${EXCEL_DATA_FILE}    nn45rs    45    50
     ${result}   Apply Filter    ${data}
 
 2.3 Ensure path is correctly followed when using noisy data north oriented
     [Tags]      Path
-    ${data}     Load Data       ${EXCEL_DATA_FILE}    n0rs    0    50
+    ${data}     Load Data       ${JSON_CONF_FILE}    ${EXCEL_DATA_FILE}    n0rs    0    50
     ${result}   Apply Filter    ${data}
 
 2.4 Ensure path is correctly estimated when following a sinusoid

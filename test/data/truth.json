@@ -1,0 +1,9 @@
+{
+    "ports" : {
+        "A" : "ColorSensor",
+        "B" : "ForceSensor",
+        "C" : "DistanceSensor",
+        "E" : "Motor",
+        "F" : "Motor"
+    }
+}

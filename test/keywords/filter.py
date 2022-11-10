@@ -28,7 +28,7 @@ def apply_filter(data) :
     path = Path(data['robot'], log, {'shall_trace':True, 'header':'---'})
     path.set(data['path'])
     path.start(min_speed=20, ramp=0.2, max_speed=100)
-    result = data['robot'].get_motor('pair').get_values()
+    result = data['robot'].get_motor('pair').get_commands()
     print(str(result))
     return result
 

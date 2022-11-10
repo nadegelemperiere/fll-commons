@@ -9,11 +9,14 @@
 # Latest revision: 19 october 2022
 # --------------------------------------------------- """
 
-# Local includes
+# System includes
 from math import pi
 
 # Spike includes
 from spike import PrimeHub, Motor, MotorPair, ColorSensor
+
+# Local includes
+from commons.robot import Robot
 
 class Spikebot(Robot) :
     """
@@ -30,8 +33,8 @@ class Spikebot(Robot) :
 
         self.m_hub              = PrimeHub()
 
-    def initialize(self) :
-        """ Robot intialization
+    def setup(self) :
+        """ Robot initialization
         ---
         Initialize all electric components
         Build motor pair if right and left motors exist

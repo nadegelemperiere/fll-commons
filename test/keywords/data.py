@@ -17,74 +17,29 @@ from robot.api import logger as logger
 from robot.api.deco import keyword
 ROBOT = False
 
+# Mock includes
+from spike.context import Context
+from spike.truth   import Truth
+
 # Local includes
-from mock import Mock
+from mockrobot import MockRobot
+from logger import Logger
 
 @keyword('Load Data')
-def load_data(filename, sheet, angle, distance) :
+def load_data(configuration, filename, sheet, angle, distance) :
 
     result = {}
 
-    data = load_excel_file(filename,sheet)
+    log = Logger(shall_print_at_once=True)
+    logconfig = {'shall_trace':True, 'header':'---'}
 
-    result['robot'] = Mock(data)
-    result['robot'].initialize()
+    result['context'] = Context()
+    result['context'].load_scenario(filename, sheet)
+    result['truth'] = Truth()
+    result['truth'].load_configuration(configuration)
+    result['robot']   = MockRobot()
+    result['robot'].setup()
+
     result['path'] = [{'yaw':float(angle),   'distance':float(distance)}]
-
-    return result
-
-def load_excel_file(filename, sheet) :
-    """ Load robot fake data from the
-        ---
-        filename  (str) : Xlsx filename to analyze
-        sheet     (str) : Excel sheet in which the cell is located
-    """
-
-    result = {}
-
-    full_filename = filename
-
-    # Load workbook with value rather than formula
-    wbook = load_workbook(full_filename, data_only = True)
-
-    # Select sheet
-    content_sheet = wbook[sheet]
-
-    # Associate header to column
-    i_column = 1
-    column_to_header = {}
-    header_to_column = {}
-    content = content_sheet.cell(1,i_column).value
-    while content is not None :
-        column_to_header[i_column]  = content
-        header_to_column[content]   = i_column
-        i_column = i_column + 1
-        content = content_sheet.cell(1,i_column).value
-    if not 'time' in header_to_column : raise Exception('Time column not found')
-    if not 'right degrees' in header_to_column : raise Exception('Right motor column not found')
-    if not 'left degrees' in header_to_column : raise Exception('Left motor column not found')
-    if not 'yaw' in header_to_column : raise Exception('Yaw column not found')
-
-    logger.info(str(header_to_column['yaw']))
-    logger.info(str(header_to_column['time']))
-    logger.info(str(header_to_column['right degrees']))
-    logger.info(str(header_to_column['left degrees']))
-
-	# Parse the lines to build data
-    result['yaw'] = []
-    result['right'] = []
-    result['left'] = []
-    result['time'] = []
-
-    for i_row in range(2,content_sheet.max_row + 1) :
-
-        result['yaw'].append(
-            float(content_sheet.cell(i_row,header_to_column['yaw']).value))
-        result['time'].append(
-            float(content_sheet.cell(i_row,header_to_column['time']).value))
-        result['right'].append(
-            float(content_sheet.cell(i_row,header_to_column['right degrees']).value))
-        result['left'].append(
-            float(content_sheet.cell(i_row,header_to_column['left degrees']).value))
 
     return result
