@@ -1,9 +1,16 @@
 {
+    "behaviour" : {
+        "load_only" : true
+    },
     "ports" : {
         "A" : "ColorSensor",
         "B" : "ForceSensor",
         "C" : "DistanceSensor",
         "E" : "Motor",
         "F" : "Motor"
+    },
+    "structure" : {
+        "wheel_distance" : 14.3,
+        "wheel_diameter" : 8.8
     }
 }

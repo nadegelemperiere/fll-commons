@@ -27,8 +27,7 @@ class MockRobot(Spikebot):
         self.m_wheels_distance      = 14.3
         self.m_wheel_diameter       = 8.8
         self.m_ports                = {
-            'motor' : { 'right' : 'E', 'left' : 'F' },
-            'color' : { 'center' : 'A' }
+            'motor' : { 'right' : 'E', 'left' : 'F' }
         }
 
     def setup(self) :

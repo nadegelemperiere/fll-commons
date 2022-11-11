@@ -97,11 +97,8 @@ class Path(ObjectWithLog) :
 
         motorpair = self.m_robot.get_motor('pair')
 
-        ramp_min = 
-
         # Start the movement with minimal speed
         motorpair.start_at_power(min_speed,0)
-
 
         target_total_distance = 0
         current_total_distance = 0

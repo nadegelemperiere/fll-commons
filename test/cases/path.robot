@@ -10,8 +10,7 @@
 
 *** Settings ***
 Documentation   A test case to check path classes functions
-Library         ../keywords/data.py
-Library         ../keywords/filter.py
+Library         ../keywords/path.py
 Library         OperatingSystem
 
 *** Variables ***
@@ -37,5 +36,5 @@ ${JSON_CONF_FILE}                 ${data}/truth.json
 
 2.4 Ensure path is correctly estimated when following a sinusoid
     [Tags]      Path
-    ${data}     Load Data       ${EXCEL_DATA_FILE}    sinus    0    20
+    ${data}     Load Data       ${JSON_CONF_FILE}    ${EXCEL_DATA_FILE}    sinus    0    20
     ${result}   Apply Filter    ${data}

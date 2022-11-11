@@ -14,6 +14,7 @@ from math import pi
 
 # Spike includes
 from spike import PrimeHub, Motor, MotorPair, ColorSensor
+from spike.truth import Truth
 
 # Local includes
 from commons.robot import Robot
